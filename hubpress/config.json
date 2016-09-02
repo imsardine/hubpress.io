@@ -4,6 +4,18 @@
     "repositoryName": "imsardine.github.io",
     "branch": "master"
   },
+  "site": {
+    "title": "在電梯裡遇見雙胞胎",
+    "description": "當你開始尋找，你就已經在前往的路上...",
+    "disqus": "imsardine-github-io"
+  },
+  "socialnetwork": {
+    "email": "imsardine@gmail.com",
+    "twitter": "imsardine",
+    "linkedin": "jeremykao",
+    "facebook": "jeremy.kao.tw",
+    "github": "imsardine"
+  },
   "theme": {
     "name": "casper"
   }
