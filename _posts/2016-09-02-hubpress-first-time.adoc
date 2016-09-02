@@ -1,0 +1,26 @@
+= 初試 HubPress
+:hp-alt-title: hubpress-first-time
+:hp-tags: hubpress
+
+一直以來都是 http://www.methods.co.nz/asciidoc/[AsciiDoc] 的愛用者，因為它比 http://daringfireball.net/projects/markdown/[Markdown] 適合拿來寫技術文件 (https://medium.com/@chacon/living-the-future-of-technical-writing[聽聽看 Pro Git 的作者 Scott Chacon 怎麼說])。或許是因為 Markdown 語法相對 (過於) 簡單，所以身邊一票 Markdown 的使用但，但知道 AsciiDoc 的人就寥寥無幾。
+
+重新找了一下可以用 AsciiDoc 寫 blog 的方案，意外發現 2015/02 開始的 http://hubpress.io/[HubPress]，
+
+ * 對中文的支持還不完整 - 文件標題跟標籤目前還不能用中文 (因為會成為檔案或目錄名稱)
++
+--
+標籤我習慣用英文 (小寫、單字用 `-` 分開，例如 `xml-rpc`、`objective-c` 等)，至於中文標題則可以搭配 `hp-alt-title` (alternative title) 這個 document attribute 重新定義(檔案) 名稱。例如：
+
+----
+= 初試 HubPress
+:hp-alt-title: hubpress-first-time
+----
+
+之後產生的 HTML 檔名就會是 `hubpress-first-time.html`。
+--
+
+== 參考資料
+
+
+
+
