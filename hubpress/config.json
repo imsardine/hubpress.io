@@ -7,6 +7,8 @@
   "site": {
     "title": "在電梯裡遇見雙胞胎",
     "description": "當你開始尋找，你就已經在前往的路上...",
+    "postsPerPage": "5",
+    "googleAnalytics": "UA-83600843-1",
     "disqus": "imsardine-github-io"
   },
   "socialnetwork": {
