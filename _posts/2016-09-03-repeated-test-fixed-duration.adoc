@@ -1,0 +1,72 @@
+= 固定時間內反覆執行一個測試
+:hp-alt-title: repeated-test-fixed-duration
+:hp-tags: junit, java, unit-testing, test-automation
+
+最近自動化測試遇到一個很特別的需求 - 想要測量長時間操作 (Android) app 所耗用的電量，而且每次測量的時間不能偏差太多 (採用 JUnit 4 做為測試框架)。姑且不論要怎麼測量 app 的耗電量 (那又是另一個故事了，之後再分享)，遇到的第一個問題是，要怎麼做到 "固定、長時間"？
+
+就 "長時間" 而言，實務上不太可能真的寫一段執行長達數十分鐘的 test case，比較可行的做法是為一段具代表性的操作情境 (scenario) 加上 loop，重複幾次相同的操作來拉長時間。但要如何讓每次測試的時間固定下來？尤其測量耗電量通常會以 end-to-end 的方式進行，有許多無法控制的環境因素 (例如網路速度)，每次測試同一個操作要花費的時間可能都不太一樣。
+
+搜尋後發現重複執行同一個 test case 的需求是有的，但都是控制重複測試的次數，以確保不會有間歇性的錯誤 (intermittent failure)。雖然沒有人在討論控制執行時間的做法，倒是從 http://www.codeaffine.com/2013/04/10/running-junit-tests-repeatedly-without-loops/[Running JUnit Tests Repeatedly Instead of Coding a Loop] (2013-04-10) 這份文件找到了一些方向 - 自訂 https://github.com/junit-team/junit4/wiki/Rules[test rule]。
+
+這份文件說明了如何自訂 `RepeatRule`，再搭配 `@Repeat(times)` 指定重複執行的次數。用起來像是這個樣子：
+
+[source,java]
+----
+public class RepeatTest {
+    @Rule
+    public RepeatRule repeatRule = new RepeatRule();
+
+    @Test
+    @Repeat(times = 10000)
+    public void usage() {
+        // test scenario ...
+    }
+}
+----
+
+文件下方有討論到，由於 `RepeatRule` 是基於 `Statement.evaluate()`，所以 `@Before` 跟 `@After` 也會重複執行。這一點在 `TestRule` 的 Javadoc 也有提到：
+
+[quote,'http://junit.org/junit4/javadoc/latest/org/junit/Rule.html[Rule (JUnit API)]']
+____
+**The `Statement` passed to the `TestRule` will run any `Before` methods, then the `Test` method, and finally any `After` methods, throwing an exception if any of these fail.** If there are multiple annotated `Rule` s on a class, they will be applied in order of fields first, then methods. However, if there are multiple fields (or methods) they will be applied in an order that depends on your JVM's implementation of the reflection API, which is undefined, in general. `Rule` s defined by fields will always be applied before `Rule` s defined by methods. You can use a `RuleChain` if you want to have control over the order in which the `Rule` s are applied.
+____
+
+另外提到順序的問題，要用 `RuleChain` 控制，把 loop 包在最內層 [TBD]
+
+TIP: http://projects.spring.io/spring-framework/[Spring Framework] 也有一個 http://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/test/annotation/Repeat.html[`@Repeat`]，但必須搭配 Spring 自己的 `SpringJUnit4ClassRunner`。不過也有相同的限制 Note that the scope of execution to be repeated includes execution of the test method itself as well as any set up or tear down of the test fixture.
+
+是限制嗎？
+
+
+綜合以上的想法，既然沒有現成的工具，只好自己來刻一個了。
+
+有沒有機會重複利用 `Timedout` 呢？
+
+ * http://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/test/annotation/Repeat.html[Repeat (Spring Framework)]
+
+這裡採用 JUnit 4 做為測試框架，
+例如  就是自訂 `RepeatRule` 再搭配 `@Repeat(times)` 來達成 (這裡採用 )
+
+ (這裡採用 JUnit 4 做為測試框架)
+
+ * 從要解決的問題出發，以量測電量為例， http://www.opera.com/blogs/desktop/2016/06/over-the-edge/[Why we challenge Microsoft’s battery test] 也是重複測試，範例要用另一個 rule 量測 battery
+ * 或是 s，多跑幾次確定不會有錯
+ * 從 `RepeatRule` 得到啟發
+ * 如何重新使用 `Timedout`
+ * 如何讓同一個 suite 裡不同的 test case 決定要不要反覆執行，若要反覆執行，要執行多久 (或幾次)
+ * 附上 GitHub repo
+ * 不確定攔截 TestTimedOutException 好不好，但至少 module 是 public API 吧?
+ * 不需要動到 runner
+
+重複執行一個測試，包含 set up 跟 tear down，這應該還算合理，否則
+
+[quote,'http://junit.org/junit4/javadoc/latest/org/junit/Rule.html[Rule (JUnit API)]']
+____
+The `Statement` passed to the `TestRule` will run any `Before` methods, then the Test method, and finally any `After` methods, throwing an exception if any of these fail.
+____
+
+對於 intermittent failures 沒差。但若是要量測整個範圍，就要用 rule chain 確保 measurement rule 在最外側。
+
+____
+If there are multiple annotated `Rule` s on a class, they will be applied in order of fields first, then methods. However, if there are multiple fields (or methods) they will be applied in an order that depends on your JVM's implementation of the reflection API, which is undefined, in general. Rules defined by fields will always be applied before Rules defined by methods. You can use a `RuleChain` if you want to have control over the order in which the Rules are applied.
+____
