@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+    <title>dmesg 的用法</title>
+    <meta name="description" content="" />
+
+    <meta name="HandheldFriendly" content="True" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <link rel="shortcut icon" href="https://imsardine.github.io/favicon.ico">
+
+    <link rel="stylesheet" type="text/css" href="//imsardine.github.io/themes/casper/assets/css/screen.css?v=1478437157650" />
+    <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Merriweather:300,700,700italic,300italic|Open+Sans:700,400" />
+
+    <link rel="canonical" href="https://imsardine.github.io/2016/11/06/dmesg-command.html" />
+    <meta name="referrer" content="origin" />
+    
+    <meta property="og:site_name" content="在電梯裡遇見雙胞胎" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="dmesg 的用法" />
+    <meta property="og:description" content="開機時，kernel 被載入記憶體，接著 module/driver 開始驅動硬體，過程中會輸出大量的訊息 (message)；開機完成後，kernel 偶爾也會產生一些有助於診斷問題 (diagnostic) 的 message，例如 I/O 發生問題、USB 裝置熱插拔時。 這些 message 都會被寫入 kernel 內部的 ring buffer (由於 buffer 的大小固定，所以舊的 message 就會被新的 message 推擠掉)，dmesg 則可以用來查看目前 kernel ring buffer 的內容： dmesg [-H] 其中 -H (--human) 會以比較容易閱讀 (human-readable) 的方式顯示，" />
+    <meta property="og:url" content="https://imsardine.github.io/2016/11/06/dmesg-command.html" />
+    <meta property="article:tag" content="linux" />
+    
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content="dmesg 的用法" />
+    <meta name="twitter:description" content="開機時，kernel 被載入記憶體，接著 module/driver 開始驅動硬體，過程中會輸出大量的訊息 (message)；開機完成後，kernel 偶爾也會產生一些有助於診斷問題 (diagnostic) 的 message，例如 I/O 發生問題、USB 裝置熱插拔時。 這些 message 都會被寫入 kernel 內部的 ring buffer (由於 buffer 的大小固定，所以舊的 message 就會被新的 message 推擠掉)，dmesg 則可以用來查看目前 kernel ring buffer 的內容： dmesg [-H] 其中 -H (--human) 會以比較容易閱讀 (human-readable) 的方式顯示，" />
+    <meta name="twitter:url" content="https://imsardine.github.io/2016/11/06/dmesg-command.html" />
+    
+    <script type="application/ld+json">
+null
+    </script>
+
+    <meta name="generator" content="HubPress" />
+    <link rel="alternate" type="application/rss+xml" title="在電梯裡遇見雙胞胎" href="https://imsardine.github.io/rss/" />
+</head>
+<body class="post-template tag-linux nav-closed">
+
+    
+
+    <div class="site-wrapper">
+
+        
+
+
+<header class="main-header post-head no-cover">
+    <nav class="main-nav  clearfix">
+        
+    </nav>
+</header>
+
+<main class="content" role="main">
+    <article class="post tag-linux">
+
+        <header class="post-header">
+            <h1 class="post-title">dmesg 的用法</h1>
+            <section class="post-meta">
+                <time class="post-date" datetime="2016-11-06">06 November 2016</time>  on <a href="https://imsardine.github.io/tag/linux/">linux</a>
+            </section>
+        </header>
+
+        <section class="post-content">
+            <div class="paragraph">
+<p>開機時，kernel 被載入記憶體，接著 module/driver 開始驅動硬體，過程中會輸出大量的訊息 (message)；開機完成後，kernel 偶爾也會產生一些有助於診斷問題 (diagnostic) 的 message，例如 I/O 發生問題、USB 裝置熱插拔時。</p>
+</div>
+<div class="paragraph">
+<p>這些 message 都會被寫入 kernel 內部的 ring buffer (由於 buffer 的大小固定，所以舊的 message 就會被新的 message 推擠掉)，<code>dmesg</code> 則可以用來查看目前 kernel ring buffer 的內容：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>dmesg [-H]</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>其中 <code>-H</code> (<code>--human</code>) 會以比較容易閱讀 (human-readable) 的方式顯示，最主要是用 local time 顯示時間。例如：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>$ dmesg
+[    0.000000] Initializing cgroup subsys cpuset
+[    0.000000] Initializing cgroup subsys cpu
+...
+[   10.834575] ppdev: user-space parallel port driver
+[   11.050179] Adding 1048572k swap on /dev/mapper/ubuntu--server--1604lts--vg-swap_1.  Priority:-1 extents:1 across:1048572k FS
+...
+
+$ dmesg -H
+[Nov 6 13:42] Initializing cgroup subsys cpuset
+[  +0.000000] Initializing cgroup subsys cpu
+...
+[Nov 6 13:43] ppdev: user-space parallel port driver
+[  +0.215604] Adding 1048572k swap on /dev/mapper/ubuntu--server--1604lts--vg-swap_1.  Priority:-1 extents:1 across:1048572k FS
+...</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>通常會搭配 <code>grep</code> 過濾特定的 kernel message，例如要找 USB 相關的問題，可以用：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>dmesg [-H] | grep -i usb</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>由於 ring buffer 本身不是個 log file，無法用 <code>tail</code> 持續觀察它的變化，不過 <code>dmesg</code> 自己提供了 <code>-w</code> (<code>--follow</code>) 可以達到相同的效果：(Kernel 3.5.0 之後才有的功能)</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>dmesg [-H] -w</pre>
+</div>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+更多關於 Linux 的學習心得，請參考 <a href="https://jeremykao.gitbooks.io/learning-linux/">Linux 學習筆記</a>。
+</td>
+</tr>
+</table>
+</div>
+        </section>
+
+        <footer class="post-footer">
+
+
+            <figure class="author-image">
+                <a class="img" href="https://imsardine.github.io/author/imsardine/" style="background-image: url(https://avatars.githubusercontent.com/u/524685?v&#x3D;3)"><span class="hidden">Jeremy Kao's Picture</span></a>
+            </figure>
+
+            <section class="author">
+                <h4><a href="https://imsardine.github.io/author/imsardine/">Jeremy Kao</a></h4>
+
+                    <p>Read <a href="https://imsardine.github.io/author/imsardine/">more posts</a> by this author.</p>
+                <div class="author-meta">
+                    <span class="author-location icon-location">Taiwan</span>
+                    <span class="author-link icon-link"><a href="http://imsardine.github.io">http://imsardine.github.io</a></span>
+                </div>
+            </section>
+
+
+            <section class="share">
+                <h4>Share this post</h4>
+                <a class="icon-twitter" href="https://twitter.com/intent/tweet?text=dmesg%20%E7%9A%84%E7%94%A8%E6%B3%95&amp;url=https://imsardine.github.io/2016/11/06/dmesg-command.html"
+                    onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
+                    <span class="hidden">Twitter</span>
+                </a>
+                <a class="icon-facebook" href="https://www.facebook.com/sharer/sharer.php?u=https://imsardine.github.io/2016/11/06/dmesg-command.html"
+                    onclick="window.open(this.href, 'facebook-share','width=580,height=296');return false;">
+                    <span class="hidden">Facebook</span>
+                </a>
+                <a class="icon-google-plus" href="https://plus.google.com/share?url=https://imsardine.github.io/2016/11/06/dmesg-command.html"
+                   onclick="window.open(this.href, 'google-plus-share', 'width=490,height=530');return false;">
+                    <span class="hidden">Google+</span>
+                </a>
+            </section>
+
+        </footer>
+
+
+        <section class="post-comments">
+          <div id="disqus_thread"></div>
+          <script type="text/javascript">
+          var disqus_shortname = 'imsardine-github-io'; // required: replace example with your forum shortname
+          /* * * DON'T EDIT BELOW THIS LINE * * */
+          (function() {
+            var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+            dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+          })();
+          </script>
+          <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+          <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+        </section>
+
+
+    </article>
+
+</main>
+
+<aside class="read-next">
+</aside>
+
+
+
+        <footer class="site-footer clearfix">
+            <section class="copyright"><a href="https://imsardine.github.io">在電梯裡遇見雙胞胎</a> &copy; 2016</section>
+            <section class="poweredby">Proudly published with <a href="http://hubpress.io">HubPress</a></section>
+        </footer>
+
+    </div>
+
+    <script type="text/javascript" src="https://code.jquery.com/jquery-1.12.0.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js?v="></script> <script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.9.0/moment-with-locales.min.js?v="></script> <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/highlight.min.js?v="></script> 
+      <script type="text/javascript">
+        jQuery( document ).ready(function() {
+          // change date with ago
+          jQuery('ago.ago').each(function(){
+            var element = jQuery(this).parent();
+            element.html( moment(element.text()).fromNow());
+          });
+        });
+
+        hljs.initHighlightingOnLoad();
+      </script>
+
+    <script type="text/javascript" src="//imsardine.github.io/themes/casper/assets/js/jquery.fitvids.js?v=1478437157650"></script>
+    <script type="text/javascript" src="//imsardine.github.io/themes/casper/assets/js/index.js?v=1478437157650"></script>
+
+    <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-83600843-1', 'auto');
+    ga('send', 'pageview');
+
+    </script>
+</body>
+</html>
