@@ -1,4 +1,4 @@
-= lsusb 指令
+= lsusb 的用法
 :hp-alt-title: lsusb-command
 :hp-tags: linux
 
