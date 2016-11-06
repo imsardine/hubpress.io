@@ -120,3 +120,4 @@ $ lsusb -s 2:2
 Bus 002 Device 002: ID 80ee:0021 VirtualBox USB Tablet
 ----
 
+TIP: 更多關於 Linux 的學習心得，請參考 https://jeremykao.gitbooks.io/learning-linux/[Linux 學習筆記]。
