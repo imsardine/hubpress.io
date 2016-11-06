@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+    <title>lsusb 的用法</title>
+    <meta name="description" content="" />
+
+    <meta name="HandheldFriendly" content="True" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <link rel="shortcut icon" href="https://imsardine.github.io/favicon.ico">
+
+    <link rel="stylesheet" type="text/css" href="//imsardine.github.io/themes/casper/assets/css/screen.css?v=1478436147093" />
+    <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Merriweather:300,700,700italic,300italic|Open+Sans:700,400" />
+
+    <link rel="canonical" href="https://imsardine.github.io/2016/11/06/lsusb-command.html" />
+    <meta name="referrer" content="origin" />
+    
+    <meta property="og:site_name" content="在電梯裡遇見雙胞胎" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="lsusb 的用法" />
+    <meta property="og:description" content="lsusb 可以列出連接的 USB 裝置。 lsusb [-v] 例如： $ lsusb Bus 001 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub Bus 002 Device 002: ID 80ee:0021 VirtualBox USB Tablet Bus 002 Device 001: ID 1d6b:0001 Linux Foundation 1.1 root hub OS X 沒有 lsusb 指令，可以用" />
+    <meta property="og:url" content="https://imsardine.github.io/2016/11/06/lsusb-command.html" />
+    <meta property="article:tag" content="linux" />
+    
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content="lsusb 的用法" />
+    <meta name="twitter:description" content="lsusb 可以列出連接的 USB 裝置。 lsusb [-v] 例如： $ lsusb Bus 001 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub Bus 002 Device 002: ID 80ee:0021 VirtualBox USB Tablet Bus 002 Device 001: ID 1d6b:0001 Linux Foundation 1.1 root hub OS X 沒有 lsusb 指令，可以用" />
+    <meta name="twitter:url" content="https://imsardine.github.io/2016/11/06/lsusb-command.html" />
+    
+    <script type="application/ld+json">
+null
+    </script>
+
+    <meta name="generator" content="HubPress" />
+    <link rel="alternate" type="application/rss+xml" title="在電梯裡遇見雙胞胎" href="https://imsardine.github.io/rss/" />
+</head>
+<body class="post-template tag-linux nav-closed">
+
+    
+
+    <div class="site-wrapper">
+
+        
+
+
+<header class="main-header post-head no-cover">
+    <nav class="main-nav  clearfix">
+        
+    </nav>
+</header>
+
+<main class="content" role="main">
+    <article class="post tag-linux">
+
+        <header class="post-header">
+            <h1 class="post-title">lsusb 的用法</h1>
+            <section class="post-meta">
+                <time class="post-date" datetime="2016-11-06">06 November 2016</time>  on <a href="https://imsardine.github.io/tag/linux/">linux</a>
+            </section>
+        </header>
+
+        <section class="post-content">
+            <div class="paragraph">
+<p><code>lsusb</code> 可以列出連接的 USB 裝置。</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>lsusb [-v]</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>例如：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>$ lsusb
+Bus 001 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
+Bus 002 Device 002: ID 80ee:0021 VirtualBox USB Tablet
+Bus 002 Device 001: ID 1d6b:0001 Linux Foundation 1.1 root hub</pre>
+</div>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>OS X 沒有 <code>lsusb</code> 指令，可以用 Homebrew 安裝 <a href="https://github.com/jlhonora/lsusb">jlhonora/lsusb</a> 進行擴充：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>brew update &amp;&amp; brew tap jlhonora/lsusb &amp;&amp; brew install lsusb</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>用法大致上跟 Linux 的版本相同 (背後利用 OS X 內建的 <code>system_profiler SPUSBDataType</code>)，細節可以參考 <code>man lsusb</code></p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>每一行都代表一個 USB 裝置，包含 4 項資訊：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>    &lt;1&gt;        &lt;2&gt;        &lt;3&gt;       <i class="conum" data-value="4"></i><b>(4)</b>
+     |          |          |         |
+Bus 001 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub</pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>裝置所在的 USB bus 編號 (從 001 開始)；一個 USB bus 可以連接多個裝置，每個裝置有不同的編號 (從 001 開始)。</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>裝置在該 USB bus 下的編號 (device number)。</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>冒號前後分別是裝置的 vendor ID (製造商) 與 product ID (產品)。</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="4"></i><b>4</b></td>
+<td>Vendor ID 與 product ID 對應的名稱。例如這裡的 <a href="https://usb-ids.gowdy.us/read/UD/1d6b"><code>1d6b</code></a> 代表的是 Linux Foundation，而 <a href="https://usb-ids.gowdy.us/read/UD/1d6b/0002"><code>0002</code></a> 則代表 2.0 root hub。</td>
+</tr>
+</table>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+Vendor ID 及 product ID 所代表的名稱，可以到 <a href="http://www.linux-usb.org/usb-ids.html">The USB ID Repository</a> 查詢。
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>在 Linux，每一個 USB bus 都用一個虛擬裝置 root hub 來表示，它的 device number 固定是 001，vendor ID 固定是 <code>1d6b</code> (Linux Foundation)，且 product ID 本身就大概能看出 USB bus 的版本：</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>0001</code> - 1.1 root hub &#8658; USB 1.1, Full Speed (12 Mbit/s)</p>
+</li>
+<li>
+<p><code>0002</code> - 2.0 root hub &#8658; USB 2.0, High Speed (480 Mbit/s)</p>
+</li>
+<li>
+<p><code>0003</code> - 3.0 root hub &#8658; USB 3.0, SuperSpeed (5 Gbit/s)</p>
+</li>
+</ul>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>由於 root hub 是虛擬裝置，搭配下面提到的 <code>-t</code> 比較有用，所以平常可以搭配 <code>grep</code> 將它們濾除。例如：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>$ lsusb | grep -v 'root hub'
+Bus 002 Device 002: ID 80ee:0021 VirtualBox USB Tablet</pre>
+</div>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>加 <code>-v</code> (<code>--verbose</code>) 可以顯示裝置的細部資訊，通常會搭配 <code>-s</code> 或 <code>-d</code> 指定裝置：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>lsusb -v -s &lt;BUS_NUMBER&gt;:&lt;DEVICE_NUMBER&gt;
+lsusb -v -d &lt;VENDOR_ID&gt;:&lt;DEVICE_ID&gt;</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>以上面的 VirtualBox USB Tablet 為例，可以用 <code>-s 2:2</code> 或 <code>-d 80ee:0021</code> 指定，效果是一樣的：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>$ lsusb -v -d 80ee:0021
+
+Bus 002 Device 002: ID 80ee:0021 VirtualBox USB Tablet
+Couldn't open device, some information will be missing
+Device Descriptor:
+  bLength                18
+  bDescriptorType         1
+  bcdUSB               1.10
+  bDeviceClass            0 (Defined at Interface level)
+  bDeviceSubClass         0
+  bDeviceProtocol         0
+  bMaxPacketSize0         8
+  idVendor           0x80ee VirtualBox
+  idProduct          0x0021 USB Tablet
+  bcdDevice            1.00
+  iManufacturer           1
+  iProduct                3
+  iSerial                 0
+  bNumConfigurations      1
+  Configuration Descriptor:
+    bLength                 9
+    bDescriptorType         2
+...</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>若想要看出 USB bus 跟裝置間的階層關係 (hierarchy)，可以搭配 <code>-t</code> 使用：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>lsusb -t</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>例如：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>$ lsusb -t
+/:  Bus 02.Port 1: Dev 1, Class=root_hub, Driver=ohci-pci/12p, 12M
+    |__ Port 1: Dev 2, If 0, Class=Human Interface Device, Driver=usbhid, 12M
+/:  Bus 01.Port 1: Dev 1, Class=root_hub, Driver=ehci-pci/12p, 480M</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>不過缺點是看不出裝置名稱，只能透過 <code>-s</code> 反查：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>lsusb [-v] -s &lt;BUS_NUMBER&gt;:&lt;DEVICE_NUMBER&gt;</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>例如：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>$ lsusb -s 2:2
+Bus 002 Device 002: ID 80ee:0021 VirtualBox USB Tablet</pre>
+</div>
+</div>
+        </section>
+
+        <footer class="post-footer">
+
+
+            <figure class="author-image">
+                <a class="img" href="https://imsardine.github.io/author/imsardine/" style="background-image: url(https://avatars.githubusercontent.com/u/524685?v&#x3D;3)"><span class="hidden">Jeremy Kao's Picture</span></a>
+            </figure>
+
+            <section class="author">
+                <h4><a href="https://imsardine.github.io/author/imsardine/">Jeremy Kao</a></h4>
+
+                    <p>Read <a href="https://imsardine.github.io/author/imsardine/">more posts</a> by this author.</p>
+                <div class="author-meta">
+                    <span class="author-location icon-location">Taiwan</span>
+                    <span class="author-link icon-link"><a href="http://imsardine.github.io">http://imsardine.github.io</a></span>
+                </div>
+            </section>
+
+
+            <section class="share">
+                <h4>Share this post</h4>
+                <a class="icon-twitter" href="https://twitter.com/intent/tweet?text=lsusb%20%E7%9A%84%E7%94%A8%E6%B3%95&amp;url=https://imsardine.github.io/2016/11/06/lsusb-command.html"
+                    onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
+                    <span class="hidden">Twitter</span>
+                </a>
+                <a class="icon-facebook" href="https://www.facebook.com/sharer/sharer.php?u=https://imsardine.github.io/2016/11/06/lsusb-command.html"
+                    onclick="window.open(this.href, 'facebook-share','width=580,height=296');return false;">
+                    <span class="hidden">Facebook</span>
+                </a>
+                <a class="icon-google-plus" href="https://plus.google.com/share?url=https://imsardine.github.io/2016/11/06/lsusb-command.html"
+                   onclick="window.open(this.href, 'google-plus-share', 'width=490,height=530');return false;">
+                    <span class="hidden">Google+</span>
+                </a>
+            </section>
+
+        </footer>
+
+
+        <section class="post-comments">
+          <div id="disqus_thread"></div>
+          <script type="text/javascript">
+          var disqus_shortname = 'imsardine-github-io'; // required: replace example with your forum shortname
+          /* * * DON'T EDIT BELOW THIS LINE * * */
+          (function() {
+            var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+            dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+          })();
+          </script>
+          <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+          <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+        </section>
+
+
+    </article>
+
+</main>
+
+<aside class="read-next">
+</aside>
+
+
+
+        <footer class="site-footer clearfix">
+            <section class="copyright"><a href="https://imsardine.github.io">在電梯裡遇見雙胞胎</a> &copy; 2016</section>
+            <section class="poweredby">Proudly published with <a href="http://hubpress.io">HubPress</a></section>
+        </footer>
+
+    </div>
+
+    <script type="text/javascript" src="https://code.jquery.com/jquery-1.12.0.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js?v="></script> <script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.9.0/moment-with-locales.min.js?v="></script> <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/highlight.min.js?v="></script> 
+      <script type="text/javascript">
+        jQuery( document ).ready(function() {
+          // change date with ago
+          jQuery('ago.ago').each(function(){
+            var element = jQuery(this).parent();
+            element.html( moment(element.text()).fromNow());
+          });
+        });
+
+        hljs.initHighlightingOnLoad();
+      </script>
+
+    <script type="text/javascript" src="//imsardine.github.io/themes/casper/assets/js/jquery.fitvids.js?v=1478436147093"></script>
+    <script type="text/javascript" src="//imsardine.github.io/themes/casper/assets/js/index.js?v=1478436147093"></script>
+
+    <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-83600843-1', 'auto');
+    ga('send', 'pageview');
+
+    </script>
+</body>
+</html>
