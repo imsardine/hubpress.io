@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[在電梯裡遇見雙胞胎]]></title><description><![CDATA[當你開始尋找，你就已經在前往的路上...]]></description><link>https://imsardine.github.io</link><generator>RSS for Node</generator><lastBuildDate>Sun, 06 Nov 2016 12:49:59 GMT</lastBuildDate><atom:link href="https://imsardine.github.io/rss/" rel="self" type="application/rss+xml"/><ttl>60</ttl><item><title><![CDATA[lsusb 的用法]]></title><description><![CDATA[<div class="paragraph">
+<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[在電梯裡遇見雙胞胎]]></title><description><![CDATA[當你開始尋找，你就已經在前往的路上...]]></description><link>https://imsardine.github.io</link><generator>RSS for Node</generator><lastBuildDate>Sun, 06 Nov 2016 12:59:17 GMT</lastBuildDate><atom:link href="https://imsardine.github.io/rss/" rel="self" type="application/rss+xml"/><ttl>60</ttl><item><title><![CDATA[lsusb 的用法]]></title><description><![CDATA[<div class="paragraph">
 <p><code>lsusb</code> 可以列出連接的 USB 裝置。</p>
 </div>
 <div class="listingblock">
@@ -203,7 +203,67 @@ Bus 002 Device 002: ID 80ee:0021 VirtualBox USB Tablet</pre>
 </td>
 </tr>
 </table>
-</div>]]></description><link>https://imsardine.github.io/2016/11/06/lsusb-command.html</link><guid isPermaLink="true">https://imsardine.github.io/2016/11/06/lsusb-command.html</guid><category><![CDATA[linux]]></category><dc:creator><![CDATA[Jeremy Kao]]></dc:creator><pubDate>Sun, 06 Nov 2016 00:00:00 GMT</pubDate></item><item><title><![CDATA[HubPress 初體驗]]></title><description><![CDATA[<div class="paragraph">
+</div>]]></description><link>https://imsardine.github.io/2016/11/06/lsusb-command.html</link><guid isPermaLink="true">https://imsardine.github.io/2016/11/06/lsusb-command.html</guid><category><![CDATA[linux]]></category><dc:creator><![CDATA[Jeremy Kao]]></dc:creator><pubDate>Sun, 06 Nov 2016 00:00:00 GMT</pubDate></item><item><title><![CDATA[dmesg 的用法]]></title><description><![CDATA[<div class="paragraph">
+<p>開機時，kernel 被載入記憶體，接著 module/driver 開始驅動硬體，過程中會輸出大量的訊息 (message)；開機完成後，kernel 偶爾也會產生一些有助於診斷問題 (diagnostic) 的 message，例如 I/O 發生問題、USB 裝置熱插拔時。</p>
+</div>
+<div class="paragraph">
+<p>這些 message 都會被寫入 kernel 內部的 ring buffer (由於 buffer 的大小固定，所以舊的 message 就會被新的 message 推擠掉)，<code>dmesg</code> 則可以用來查看目前 kernel ring buffer 的內容：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>dmesg [-H]</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>其中 <code>-H</code> (<code>--human</code>) 會以比較容易閱讀 (human-readable) 的方式顯示，最主要是用 local time 顯示時間。例如：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>$ dmesg
+[    0.000000] Initializing cgroup subsys cpuset
+[    0.000000] Initializing cgroup subsys cpu
+...
+[   10.834575] ppdev: user-space parallel port driver
+[   11.050179] Adding 1048572k swap on /dev/mapper/ubuntu--server--1604lts--vg-swap_1.  Priority:-1 extents:1 across:1048572k FS
+...
+
+$ dmesg -H
+[Nov 6 13:42] Initializing cgroup subsys cpuset
+[  +0.000000] Initializing cgroup subsys cpu
+...
+[Nov 6 13:43] ppdev: user-space parallel port driver
+[  +0.215604] Adding 1048572k swap on /dev/mapper/ubuntu--server--1604lts--vg-swap_1.  Priority:-1 extents:1 across:1048572k FS
+...</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>通常會搭配 <code>grep</code> 過濾特定的 kernel message，例如要找 USB 相關的問題，可以用：</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>dmesg [-H] | grep -i usb</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>由於 ring buffer 本身不是個 log file，無法用 <code>tail</code> 持續觀察它的變化，不過 <code>dmesg</code> 自己提供了 <code>-w</code> (<code>--follow</code>) 可以達到相同的效果：(Kernel 3.5.0 之後才有的功能)</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>dmesg [-H] -w</pre>
+</div>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+更多關於 Linux 的學習心得，請參考 <a href="https://jeremykao.gitbooks.io/learning-linux/">Linux 學習筆記</a>。
+</td>
+</tr>
+</table>
+</div>]]></description><link>https://imsardine.github.io/2016/11/06/dmesg-command.html</link><guid isPermaLink="true">https://imsardine.github.io/2016/11/06/dmesg-command.html</guid><category><![CDATA[linux]]></category><dc:creator><![CDATA[Jeremy Kao]]></dc:creator><pubDate>Sun, 06 Nov 2016 00:00:00 GMT</pubDate></item><item><title><![CDATA[HubPress 初體驗]]></title><description><![CDATA[<div class="paragraph">
 <p><a href="http://daringfireball.net/projects/markdown/">Markdown</a> 或許是因為相對容易上手而被廣泛採用 (GitHub、Stack Overflow 等)，但一方面也因為語法過於簡單的關係，在撰寫技術文件時顯得有些侷限 (<a href="https://medium.com/@chacon/living-the-future-of-technical-writing-2f368bd0a272">聽聽看 Pro Git 的作者 Scott Chacon 怎麼說</a>)，所以我一直以來都偏好使用 <a href="http://www.methods.co.nz/asciidoc/">AsciiDoc</a>，不過似乎國內的使用者並不多？</p>
 </div>
 <div class="admonitionblock tip">
